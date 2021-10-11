@@ -49,10 +49,13 @@ const useStyle = makeStyles((theme) => ({
   },
   radioContainer: { display: "flex", alignItems: "center", gap: 2 },
   buttonContainer: {
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(4),
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    maxWidth: theme.maxWidth,
+    marginInline: "auto ",
   },
   green: { color: theme.palette.text.green },
   red: { color: "red" },
@@ -83,9 +86,11 @@ const Exercise = () => {
     if (user?.chapters) thisChapter = user.chapters.find((chapter) => chapter._id === chapterId);
     const thisExercise = thisChapter?.exercises?.find((exercise) => exercise._id === exerciseId);
     //indexing each question cause the data from database doesn't come with indices
-    thisExercise.questions = thisExercise?.questions?.map((question, index) => {
-      return { ...question, title: `${index + 1}. ${question.title}` };
-    });
+    if (isNaN(thisExercise.questions[0].title.trim()[0])) {
+      thisExercise.questions = thisExercise?.questions?.map((question, index) => {
+        return { ...question, title: `${index + 1}. ${question.title}` };
+      });
+    }
 
     //index of this exercise
     const index = thisChapter?.exercises?.indexOf(thisExercise);
@@ -192,6 +197,7 @@ const Exercise = () => {
         //this is to render to the page as well
         setMsg({ msg: `${correct}/${total}`, show: true, variant: "h6" });
         setIsLoading(false);
+        headerRef.current.scrollIntoView();
       })
       .catch((err) => console.log(err));
   };
@@ -247,7 +253,6 @@ const Exercise = () => {
           Page: {page.currentPage + 1}
         </Typography>
       </Paper>
-
       <Grid container spacing={1.5} className={classes.gridContainer}>
         {data?.exercise?.questions?.slice(...calculatePage()).map((question, questionIndex) => (
           <Grid item xs={12} key={questionIndex}>
@@ -286,28 +291,25 @@ const Exercise = () => {
           </Grid>
         ))}
       </Grid>
-
       {msg.show && (
         <Typography className={classes.green} variant={msg.variant} align="center" mt={2}>
           {msg.msg}
         </Typography>
       )}
-
-      {page.count !== page.currentPage || hasSubmitted ? (
-        <Box className={classes.buttonContainer}>
-          {page.currentPage !== 0 ? (
-            <Button variant="contained" color="info" onClick={prevPage} startIcon={<ArrowBackIcon />}>
-              back
-            </Button>
-          ) : (
-            <Typography />
-          )}
-          <Button variant="contained" color="info" onClick={nextPage} endIcon={<ArrowForwardIcon />}>
-            next
+      <Box className={classes.buttonContainer}>
+        {page.currentPage !== 0 && (
+          <Button variant="contained" color="info" onClick={prevPage} startIcon={<ArrowBackIcon />}>
+            Page: {page.currentPage}
           </Button>
-        </Box>
-      ) : (
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 4 }}>
+        )}
+
+        <Typography sx={{ flex: 1 }} />
+
+        {page.count !== page.currentPage || hasSubmitted ? (
+          <Button variant="contained" color="info" onClick={nextPage} endIcon={<ArrowForwardIcon />}>
+            {page.count === page.currentPage ? "Next Exercise" : `Page: ${page.currentPage + 2}`}
+          </Button>
+        ) : (
           <LoadingButton
             onClick={handleSubmit}
             loading={isLoading}
@@ -317,8 +319,8 @@ const Exercise = () => {
           >
             Submit
           </LoadingButton>
-        </Box>
-      )}
+        )}
+      </Box>
     </Box>
   );
 };

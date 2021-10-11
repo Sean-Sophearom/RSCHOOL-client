@@ -61,6 +61,7 @@ const useStyle = makeStyles((theme) => ({
       borderRadius: 20,
       color: theme.palette.white,
     },
+    marginTop: theme.spacing(6),
   },
   blue: { color: theme.palette.text.blue },
   yellow: { color: theme.palette.text.yellow },
@@ -103,6 +104,7 @@ const LoginPage = () => {
         setIsLoading(false);
       })
       .catch((err) => {
+        setIsLoading(false);
         const errorMessage = err.response.data.message;
         if (!errorMessage.includes("password")) {
           return setError({ ...error, username: errorMessage });
