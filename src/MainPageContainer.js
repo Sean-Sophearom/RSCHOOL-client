@@ -23,7 +23,11 @@ const useStyle = makeStyles({
   },
   root: {
     animation: `$onLoadAnimation 1.25s ease`,
+<<<<<<< HEAD
     overflowX: "hidden",
+=======
+    overflowX: 'hidden'
+>>>>>>> 0e37709175d2c268a4081c174476a31375cf39f0
   },
 });
 
