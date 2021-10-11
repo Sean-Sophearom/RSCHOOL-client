@@ -1,4 +1,5 @@
-import { Button, Checkbox, IconButton, InputAdornment, OutlinedInput, Typography } from "@mui/material";
+import { Checkbox, IconButton, InputAdornment, OutlinedInput, Typography } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { Box } from "@mui/system";
 import { makeStyles } from "@mui/styles";
 import { userContext } from "./userContext";
@@ -81,6 +82,7 @@ const LoginPage = () => {
   const [checkbox, setCheckbox] = useState(false);
   const [error, setError] = useState({ username: "", password: "" });
   const [user, setUser] = useContext(userContext);
+  const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
 
   // if already logged in redirect to home page
@@ -92,15 +94,17 @@ const LoginPage = () => {
   const handleSubmit = () => {
     if (!username) return setError({ ...error, username: "Please enter your username" });
     if (!password) return setError({ ...error, password: "Please enter your password" });
+    setIsLoading(true);
     axios
       .post("https://rschool-online.herokuapp.com/api/auth/login", { username, password })
       .then((res) => {
         checkbox && localStorage.setItem("user", JSON.stringify(res.data));
         setUser(res.data);
+        setIsLoading(false);
       })
       .catch((err) => {
         const errorMessage = err.response.data.message;
-        if (errorMessage.includes("username")) {
+        if (!errorMessage.includes("password")) {
           return setError({ ...error, username: errorMessage });
         } else {
           return setError({ ...error, password: errorMessage });
@@ -183,9 +187,9 @@ const LoginPage = () => {
         </Box>
 
         <Box className={classes.buttonContainer}>
-          <Button variant="contained" type="submit" onClick={handleSubmit}>
+          <LoadingButton loading={isLoading} variant="contained" onClick={handleSubmit}>
             Sign In
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
     </Box>

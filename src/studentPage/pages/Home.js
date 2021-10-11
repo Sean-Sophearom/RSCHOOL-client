@@ -41,16 +41,20 @@ const Home = () => {
 
   useEffect(() => {
     //check for the chapter that has not been done yet
-    const newDisplayChapter =
-      user?.chapters?.filter((chapter) => {
-        chapter?.exercise?.forEach((exercise) => {
-          exercise?.questions.forEach((question) => {
-            if (question?.studentsChoice) return false;
-          });
-        });
-        return true;
-      }) || [];
-    setDisplayChapter(newDisplayChapter[0] || user?.chapters?.slice(-1)[0]);
+    // const newDisplayChapter =
+    //   user?.chapters?.filter((chapter) => {
+    //     chapter?.exercises?.forEach((exercise) => {
+    //       exercise?.questions.forEach((question) => {
+    //         if (question?.studentsChoice) return false;
+    //       });
+    //     });
+    //     return true;
+    //   }) || [];
+    // setDisplayChapter(newDisplayChapter[0] || user?.chapters?.slice(-1)[0]);
+
+    //the above function is currently broken so im just randomly picking chapter to display for now
+    let index = Math.floor(Math.random() * user?.chapters?.length);
+    setDisplayChapter(user?.chapters[index]);
   }, [user]);
 
   useEffect(() => {
