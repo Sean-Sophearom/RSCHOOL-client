@@ -160,7 +160,7 @@ const LandingPage = () => {
       const timeOut1 = setTimeout(() => {
         setIndex(index + 1);
         setText((prev) => {
-          prev + myText1[index] === myText1 && setIteration(iteration + 1);
+          prev + myText1[index] === myText1 && setIteration((prev) => prev + 1);
           return prev + (myText1[index] || "");
         });
       }, 50);
@@ -169,7 +169,7 @@ const LandingPage = () => {
       const timeOut2 = setTimeout(() => {
         setIndex(index - 1);
         setText((prev) => {
-          !prev.slice(0, -1) && setIteration(iteration + 1);
+          !prev.slice(0, -1) && setIteration((prev) => prev + 1);
           return prev.slice(0, -1);
         });
       }, 25);
@@ -178,7 +178,7 @@ const LandingPage = () => {
       const timeOut2 = setTimeout(() => {
         setIndex(index + 1);
         setText((prev) => {
-          prev + myText2[index] === myText2 && setIteration(iteration + 1);
+          prev + myText2[index] === myText2 && setIteration((prev) => prev + 1);
           return prev + (myText2[index] || "");
         });
       }, 50);

@@ -14,7 +14,7 @@ import { makeStyles } from "@mui/styles";
 import React, { useContext, useEffect, useState } from "react";
 import { userContext } from "../../userContext";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios from "../../customAxios";
 import EditIcon from "@mui/icons-material/Edit";
 import { Box } from "@mui/system";
 
@@ -53,7 +53,7 @@ const AllStudents = () => {
     if (token && user.accType === "teacher") {
       axios({
         method: "get",
-        url: "https://rschool-online.herokuapp.com/api/student",
+        url: "/api/student",
         headers: { "auth-token": token },
       })
         .then((res) => {
@@ -120,8 +120,16 @@ const AllStudents = () => {
           </TableHead>
           <TableBody>
             {searchResults.map((row) => (
-              <TableRow key={row._id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                <TableCell component="th" scope="row" align="center" sx={{ textDecoration: "underline" }}>
+              <TableRow
+                key={row._id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell
+                  component="th"
+                  scope="row"
+                  align="center"
+                  sx={{ textDecoration: "underline" }}
+                >
                   <Link to={`/students/${row._id}`}>{row.name}</Link>
                 </TableCell>
                 <TableCell align="center">{row.gender}</TableCell>

@@ -1,10 +1,20 @@
-import { Button, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from "@mui/material";
+import {
+  Button,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { userContext } from "../../userContext";
 import { chaptersContext } from "../../ChaptersContext";
-import axios from "axios";
+import axios from "../../customAxios";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Box } from "@mui/system";
 import EditIcon from "@mui/icons-material/Edit";
@@ -54,7 +64,7 @@ const EditChapter = () => {
   const deleteChapter = () => {
     axios({
       method: "delete",
-      url: `https://rschool-online.herokuapp.com/api/chapters/${id}`,
+      url: `/api/chapters/${id}`,
       headers: { "auth-token": user.token },
     })
       .then(history.push("/chapters"))
@@ -86,7 +96,9 @@ const EditChapter = () => {
         <List>
           {currentChapter?.description.map((item, index) => (
             <ListItem key={index} sx={{ py: 0 }}>
-              <ListItemIcon sx={{ color: "black", transform: "scale(0.5)", minWidth: 30 }}>
+              <ListItemIcon
+                sx={{ color: "black", transform: "scale(0.5)", minWidth: 30 }}
+              >
                 <FiberManualRecordIcon fontSize="small" color="black" />
               </ListItemIcon>
               <ListItemText primary={item} />
@@ -101,7 +113,11 @@ const EditChapter = () => {
             <Grid key={item._id} item xs={12} md={6}>
               <Paper sx={{ p: { xs: 1, sm: 2 }, height: "100%" }}>
                 <Box sx={{ display: "flex" }}>
-                  <Typography variant="h6" gutterBottom sx={{ flex: 1, display: "inline" }}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    sx={{ flex: 1, display: "inline" }}
+                  >
                     {index + 1}. {item.title}
                   </Typography>
 
@@ -112,7 +128,9 @@ const EditChapter = () => {
                   </Link>
                 </Box>
 
-                <Typography>{item.instruction || "No instructions."}</Typography>
+                <Typography>
+                  {item.instruction || "No instructions."}
+                </Typography>
               </Paper>
             </Grid>
           ))}

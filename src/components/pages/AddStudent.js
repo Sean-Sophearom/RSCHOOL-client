@@ -18,7 +18,7 @@ import React, { useContext, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { userContext } from "../../userContext";
-import axios from "axios";
+import axios from "../../customAxios";
 
 const useStyle = makeStyles((theme) => ({
   root: {
@@ -29,7 +29,10 @@ const useStyle = makeStyles((theme) => ({
     maxWidth: theme.maxWidth,
     marginInline: "auto",
   },
-  mainContainer: { maxWidth: `calc(${theme.maxWidth} / 2)`, marginInline: "auto" },
+  mainContainer: {
+    maxWidth: `calc(${theme.maxWidth} / 2)`,
+    marginInline: "auto",
+  },
   inputContainer: { marginBlock: theme.spacing(3) },
   error: {
     color: "red",
@@ -73,7 +76,7 @@ const AddStudent = () => {
     }
     axios({
       method: "post",
-      url: "https://rschool-online.herokuapp.com/api/student",
+      url: "/api/student",
       headers: { "auth-token": user.token },
       data: { username, password, gender, phone, email },
     })

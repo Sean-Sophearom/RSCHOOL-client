@@ -2,7 +2,7 @@ import { Paper, Typography, Grid } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useContext, useEffect, useState } from "react";
 import { userContext } from "../../userContext";
-import axios from "axios";
+import axios from "../../customAxios";
 import { Box } from "@mui/system";
 import PeopleIcon from "@mui/icons-material/People";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
@@ -19,7 +19,11 @@ const useStyle = makeStyles((theme) => ({
     maxWidth: theme.maxWidth,
     marginInline: "auto",
   },
-  container: { maxWidth: theme.maxWidth, marginInline: "auto", marginTop: theme.spacing(2) },
+  container: {
+    maxWidth: theme.maxWidth,
+    marginInline: "auto",
+    marginTop: theme.spacing(2),
+  },
   paper: {
     padding: theme.spacing(2.5),
     display: "flex",
@@ -36,7 +40,11 @@ const useStyle = makeStyles((theme) => ({
 const MainContent = () => {
   const [user] = useContext(userContext);
   const [students, setStudents] = useState([]);
-  const [count, setCount] = useState({ questions: 0, chapters: 0, students: 0 });
+  const [count, setCount] = useState({
+    questions: 0,
+    chapters: 0,
+    students: 0,
+  });
   const classes = useStyle();
 
   useEffect(() => {
@@ -44,14 +52,14 @@ const MainContent = () => {
     if (token && user.accType === "teacher") {
       axios({
         method: "get",
-        url: "https://rschool-online.herokuapp.com/api/student",
+        url: "/api/student",
         headers: { "auth-token": user.token },
       })
         .then((res) => setStudents(res.data))
         .catch((err) => console.log(err));
       axios({
         method: "get",
-        url: "https://rschool-online.herokuapp.com/api/chapters",
+        url: "/api/chapters",
         headers: { "auth-token": user.token },
       })
         .then((res) => {
@@ -63,7 +71,11 @@ const MainContent = () => {
               exercise.questions.forEach((question) => questionCount++);
             });
           });
-          setCount((count) => ({ ...count, questions: questionCount, chapters: chapterCount }));
+          setCount((count) => ({
+            ...count,
+            questions: questionCount,
+            chapters: chapterCount,
+          }));
         })
         .catch((err) => console.log(err));
     }
@@ -81,11 +93,18 @@ const MainContent = () => {
           <Grid item xs={12} sm={6}>
             <Link to="/students">
               <Paper className={classes.paper} sx={{}}>
-                <Typography align="center" variant="h5" className={classes.green}>
+                <Typography
+                  align="center"
+                  variant="h5"
+                  className={classes.green}
+                >
                   {students.length}
                   <Typography>Students</Typography>
                 </Typography>
-                <PeopleIcon fontSize="large" className={`${classes.icon} ${classes.green}`} />
+                <PeopleIcon
+                  fontSize="large"
+                  className={`${classes.icon} ${classes.green}`}
+                />
               </Paper>
             </Link>
           </Grid>
@@ -93,11 +112,18 @@ const MainContent = () => {
           <Grid item xs={12} sm={6}>
             <Link to="/chapters">
               <Paper className={classes.paper} sx={{}}>
-                <Typography align="center" variant="h5" className={classes.pink}>
+                <Typography
+                  align="center"
+                  variant="h5"
+                  className={classes.pink}
+                >
                   {count.chapters}
                   <Typography>Chapters</Typography>
                 </Typography>
-                <LibraryBooksIcon fontSize="large" className={`${classes.icon} ${classes.pink}`} />
+                <LibraryBooksIcon
+                  fontSize="large"
+                  className={`${classes.icon} ${classes.pink}`}
+                />
               </Paper>
             </Link>
           </Grid>
@@ -105,11 +131,18 @@ const MainContent = () => {
           <Grid item xs={12} sm={6}>
             <Link to="/chapters">
               <Paper className={classes.paper} sx={{}}>
-                <Typography align="center" variant="h5" className={classes.yellow}>
+                <Typography
+                  align="center"
+                  variant="h5"
+                  className={classes.yellow}
+                >
                   {count.questions}
                   <Typography> Questions</Typography>
                 </Typography>
-                <HelpIcon fontSize="large" className={`${classes.icon} ${classes.yellow}`} />
+                <HelpIcon
+                  fontSize="large"
+                  className={`${classes.icon} ${classes.yellow}`}
+                />
               </Paper>
             </Link>
           </Grid>
@@ -119,7 +152,10 @@ const MainContent = () => {
               <Typography align="center" variant="h5" className={classes.blue}>
                 0<Typography>Placeholder</Typography>
               </Typography>
-              <HomeIcon fontSize="large" className={`${classes.icon} ${classes.blue}`} />
+              <HomeIcon
+                fontSize="large"
+                className={`${classes.icon} ${classes.blue}`}
+              />
             </Paper>
           </Grid>
         </Grid>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../customAxios";
 import { userContext } from "../../userContext";
 
 //mui
@@ -60,7 +60,12 @@ const useStyle = makeStyles((theme) => ({
     },
     margin: "0 4px",
   },
-  closeIcon: { position: "relative", left: 8, bottom: 8, [theme.breakpoints.down("sm")]: { bottom: 20 } },
+  closeIcon: {
+    position: "relative",
+    left: 8,
+    bottom: 8,
+    [theme.breakpoints.down("sm")]: { bottom: 20 },
+  },
   inputContainer: { paddingTop: theme.spacing(4) },
   gray: { color: theme.palette.text.gray },
 }));
@@ -82,7 +87,7 @@ const AllChapters = () => {
     if (token && user.accType === "teacher") {
       axios({
         method: "get",
-        url: "https://rschool-online.herokuapp.com/api/chapters",
+        url: "/api/chapters",
         headers: { "auth-token": token },
       })
         .then((res) => setChapters(res.data))
@@ -120,7 +125,7 @@ const AllChapters = () => {
     }
     axios({
       method: "post",
-      url: "https://rschool-online.herokuapp.com/api/chapters",
+      url: "/api/chapters",
       headers: { "auth-token": user.token },
       data: { title: inputTitle, description: descriptionList },
     })
@@ -161,7 +166,10 @@ const AllChapters = () => {
             <Grid item key={item._id} xs={12} md={6}>
               <Paper className={classes.paper}>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Typography variant="h4" sx={{ fontSize: 28, flex: 1, display: "inline" }}>
+                  <Typography
+                    variant="h4"
+                    sx={{ fontSize: 28, flex: 1, display: "inline" }}
+                  >
                     {item.title}
                   </Typography>
 
@@ -174,7 +182,13 @@ const AllChapters = () => {
                 <List>
                   {item.description.map((i, index) => (
                     <ListItem key={index} sx={{ py: 0 }}>
-                      <ListItemIcon sx={{ color: "black", transform: "scale(0.5)", minWidth: 30 }}>
+                      <ListItemIcon
+                        sx={{
+                          color: "black",
+                          transform: "scale(0.5)",
+                          minWidth: 30,
+                        }}
+                      >
                         <FiberManualRecordIcon fontSize="small" color="black" />
                       </ListItemIcon>
                       <ListItemText primary={i} />
@@ -187,7 +201,12 @@ const AllChapters = () => {
       </Grid>
 
       <Box className={classes.buttonContainer}>
-        <Button variant="contained" color="info" endIcon={<AddCircleOutlineIcon />} onClick={handleOpen}>
+        <Button
+          variant="contained"
+          color="info"
+          endIcon={<AddCircleOutlineIcon />}
+          onClick={handleOpen}
+        >
           Add new Chapter
         </Button>
       </Box>
@@ -235,7 +254,13 @@ const AllChapters = () => {
             <List>
               {descriptionList.map((description, index) => (
                 <ListItem key={index} sx={{ py: 0 }}>
-                  <ListItemIcon sx={{ color: "black", transform: "scale(0.5)", minWidth: 30 }}>
+                  <ListItemIcon
+                    sx={{
+                      color: "black",
+                      transform: "scale(0.5)",
+                      minWidth: 30,
+                    }}
+                  >
                     <FiberManualRecordIcon fontSize="small" color="black" />
                   </ListItemIcon>
                   <ListItemText primary={description} />
@@ -254,14 +279,20 @@ const AllChapters = () => {
                 fullWidth
                 value={inputDescription}
                 onChange={(e) => {
-                  if (e.nativeEvent.inputType !== "insertLineBreak") setInputDescription(e.target.value);
+                  if (e.nativeEvent.inputType !== "insertLineBreak")
+                    setInputDescription(e.target.value);
                 }}
                 onKeyDown={handleKeyDown}
               />
             </Box>
 
             <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-              <Button variant="contained" color="info" endIcon={<SaveIcon />} onClick={saveNewChapter}>
+              <Button
+                variant="contained"
+                color="info"
+                endIcon={<SaveIcon />}
+                onClick={saveNewChapter}
+              >
                 Save
               </Button>
             </Box>
@@ -274,7 +305,11 @@ const AllChapters = () => {
             onClose={handleCloseSnackbar}
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
           >
-            <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: "100%" }}>
+            <Alert
+              onClose={handleCloseSnackbar}
+              severity="error"
+              sx={{ width: "100%" }}
+            >
               {snackbarMsg}
             </Alert>
           </Snackbar>

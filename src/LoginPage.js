@@ -1,4 +1,10 @@
-import { Checkbox, IconButton, InputAdornment, OutlinedInput, Typography } from "@mui/material";
+import {
+  Checkbox,
+  IconButton,
+  InputAdornment,
+  OutlinedInput,
+  Typography,
+} from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Box } from "@mui/system";
 import { makeStyles } from "@mui/styles";
@@ -7,7 +13,7 @@ import { useHistory } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import axios from "axios";
+import axios from "./customAxios";
 
 const useStyle = makeStyles((theme) => ({
   "@keyframes onLoadAnimation": {
@@ -88,16 +94,19 @@ const LoginPage = () => {
 
   // if already logged in redirect to home page
   useEffect(() => {
-    localStorage.getItem("user") && setUser(JSON.parse(localStorage.getItem("user")));
+    localStorage.getItem("user") &&
+      setUser(JSON.parse(localStorage.getItem("user")));
     user && history.push("/home");
   }, [user, history, setUser]);
 
   const handleSubmit = () => {
-    if (!username) return setError({ ...error, username: "Please enter your username" });
-    if (!password) return setError({ ...error, password: "Please enter your password" });
+    if (!username)
+      return setError({ ...error, username: "Please enter your username" });
+    if (!password)
+      return setError({ ...error, password: "Please enter your password" });
     setIsLoading(true);
     axios
-      .post("https://rschool-online.herokuapp.com/api/auth/login", { username, password })
+      .post("/api/auth/login", { username, password })
       .then((res) => {
         checkbox && localStorage.setItem("user", JSON.stringify(res.data));
         setUser(res.data);
@@ -125,8 +134,13 @@ const LoginPage = () => {
 
       <Box className={classes.mainContainer}>
         <Box className={classes.headerContainer}>
-          <Typography variant="h4" component="h1" sx={{ mb: 1.25, fontSize: 30 }}>
-            Sign in to {<span className={classes.blue}>RSCHOOL</span>} {<span className={classes.yellow}>Online</span>}
+          <Typography
+            variant="h4"
+            component="h1"
+            sx={{ mb: 1.25, fontSize: 30 }}
+          >
+            Sign in to {<span className={classes.blue}>RSCHOOL</span>}{" "}
+            {<span className={classes.yellow}>Online</span>}
           </Typography>
           <Typography variant="body1" className={classes.gray}>
             Enter your details below
@@ -169,7 +183,10 @@ const LoginPage = () => {
             type={showPassword ? "text" : "password"}
             endAdornment={
               <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                <IconButton
+                  onClick={() => setShowPassword(!showPassword)}
+                  edge="end"
+                >
                   {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>
               </InputAdornment>
@@ -183,13 +200,20 @@ const LoginPage = () => {
           )}
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Checkbox checked={checkbox} onChange={(e) => setCheckbox(e.target.checked)} />
+            <Checkbox
+              checked={checkbox}
+              onChange={(e) => setCheckbox(e.target.checked)}
+            />
             <Typography>Keep me signed in</Typography>
           </Box>
         </Box>
 
         <Box className={classes.buttonContainer}>
-          <LoadingButton loading={isLoading} variant="contained" onClick={handleSubmit}>
+          <LoadingButton
+            loading={isLoading}
+            variant="contained"
+            onClick={handleSubmit}
+          >
             Sign In
           </LoadingButton>
         </Box>

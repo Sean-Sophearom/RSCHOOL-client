@@ -58,7 +58,7 @@ const Home = () => {
   }, [user]);
 
   useEffect(() => {
-    if (!user.done) {
+    if (isNaN(user.done)) {
       const { numOfDone, numOfCorrectlyDone, numOfQuestions } = user;
       let { end } = user;
       //calculate daysLeft

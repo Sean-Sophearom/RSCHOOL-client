@@ -1,4 +1,12 @@
-import { IconButton, Paper, Typography, Button, Snackbar, Alert, Grid } from "@mui/material";
+import {
+  IconButton,
+  Paper,
+  Typography,
+  Button,
+  Snackbar,
+  Alert,
+  Grid,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/system";
 import React, { useContext, useEffect, useState } from "react";
@@ -11,7 +19,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddIcon from "@mui/icons-material/Add";
-import axios from "axios";
+import axios from "../../customAxios";
 
 //modal
 import DeleteModal from "./Modals/DeleteModal";
@@ -41,7 +49,12 @@ const useStyle = makeStyles((theme) => ({
     },
   },
   addIconContainer: { position: "fixed", bottom: 35, right: 35 },
-  saveIconContainer: { maxWidth: theme.maxWidth, display: "flex", justifyContent: "center", marginInline: "auto" },
+  saveIconContainer: {
+    maxWidth: theme.maxWidth,
+    display: "flex",
+    justifyContent: "center",
+    marginInline: "auto",
+  },
   green: { color: "#03ac13" },
 }));
 
@@ -59,9 +72,12 @@ const EditExercise = () => {
 
   useEffect(() => {
     let thisChapter;
-    if (chapters) thisChapter = chapters?.find((item) => item._id === chapterId);
+    if (chapters)
+      thisChapter = chapters?.find((item) => item._id === chapterId);
     if (!thisChapter) history.push("/chapters");
-    const thisExercise = thisChapter?.exercises?.find((item) => item._id === exerciseId);
+    const thisExercise = thisChapter?.exercises?.find(
+      (item) => item._id === exerciseId
+    );
     if (!thisExercise) history.push(`/chapters/${chapterId}`);
     setCurrentExercise(thisExercise);
     setPrevQuestions(thisExercise?.questions);
@@ -88,12 +104,16 @@ const EditExercise = () => {
   const handleDelete = () => {
     const thisChapter = chapters?.find((chapter) => chapter._id === chapterId);
     const { exercises } = thisChapter;
-    const updatedExercises = exercises.filter((exercise) => exercise._id !== exerciseId);
+    const updatedExercises = exercises.filter(
+      (exercise) => exercise._id !== exerciseId
+    );
     const updatedChapter = { ...thisChapter, exercises: updatedExercises };
-    const updatedChapters = chapters.map((chapter) => (chapter._id !== chapterId ? chapter : updatedChapter));
+    const updatedChapters = chapters.map((chapter) =>
+      chapter._id !== chapterId ? chapter : updatedChapter
+    );
     axios({
       method: "put",
-      url: `https://rschool-online.herokuapp.com/api/chapters/${chapterId}`,
+      url: `/api/chapters/${chapterId}`,
       headers: { "auth-token": user.token },
       data: { exercises: updatedExercises },
     }).then((res) => {
@@ -159,7 +179,8 @@ const EditExercise = () => {
         )}
 
         <Typography sx={{ color: "gray" }}>
-          (Please do not forget to save after you make any changes. Any progress made without saving wil be lost.)
+          (Please do not forget to save after you make any changes. Any progress
+          made without saving wil be lost.)
         </Typography>
       </Paper>
 
@@ -173,7 +194,10 @@ const EditExercise = () => {
                     {index + 1}. {question?.title}
                   </Typography>
 
-                  <IconButton onClick={() => removeQuestion(index)} sx={{ p: 0, alignSelf: "flex-start" }}>
+                  <IconButton
+                    onClick={() => removeQuestion(index)}
+                    sx={{ p: 0, alignSelf: "flex-start" }}
+                  >
                     <CancelIcon />
                   </IconButton>
                 </Box>
@@ -196,14 +220,23 @@ const EditExercise = () => {
       <Box className={classes.addIconContainer}>
         <IconButton
           onClick={() => setOpenAddModal(true)}
-          sx={{ background: "#65a9e8", color: "white", "&:hover": { background: "#5a9ddb" } }}
+          sx={{
+            background: "#65a9e8",
+            color: "white",
+            "&:hover": { background: "#5a9ddb" },
+          }}
         >
           <AddIcon fontSize="large" />
         </IconButton>
       </Box>
 
       <Box className={classes.saveIconContainer}>
-        <Button variant="contained" color="info" sx={{ px: 4 }} onClick={handleSave}>
+        <Button
+          variant="contained"
+          color="info"
+          sx={{ px: 4 }}
+          onClick={handleSave}
+        >
           Save
         </Button>
       </Box>
@@ -228,7 +261,11 @@ const EditExercise = () => {
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           Saved Successfully
         </Alert>
       </Snackbar>
