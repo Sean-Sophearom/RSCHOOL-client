@@ -1,13 +1,4 @@
-import {
-  Alert,
-  Button,
-  IconButton,
-  Modal,
-  Snackbar,
-  TextField,
-  Typography,
-  Radio,
-} from "@mui/material";
+import { Alert, Button, IconButton, Modal, Snackbar, TextField, Typography, Radio } from "@mui/material";
 import { Box } from "@mui/system";
 import { makeStyles } from "@mui/styles";
 import React, { useContext, useState } from "react";
@@ -41,13 +32,7 @@ const useStyle = makeStyles((theme) => ({
   gray: { color: theme.palette.text.gray },
 }));
 
-const AddNewExerciseModal = ({
-  open,
-  handleClose,
-  currentChapter,
-  id,
-  user,
-}) => {
+const AddNewExerciseModal = ({ open, handleClose, currentChapter, id, user }) => {
   const classes = useStyle();
   const [chapters, setChapters] = useContext(chaptersContext);
   const [title, setTitle] = useState("");
@@ -91,9 +76,7 @@ const AddNewExerciseModal = ({
       headers: { "auth-token": user.token },
       data: { exercises: allExercises },
     }).then((res) => {
-      const updatedChapters = chapters.map((chapter) =>
-        chapter._id !== id ? chapter : res.data
-      );
+      const updatedChapters = chapters.map((chapter) => (chapter._id !== id ? chapter : res.data));
       setChapters(updatedChapters);
       handleReset();
       handleClose();
@@ -139,11 +122,7 @@ const AddNewExerciseModal = ({
           <Typography display="inline-block" variant="h6" gutterBottom>
             Instruction
           </Typography>
-          <Typography
-            variant="body2"
-            display="inline"
-            sx={{ color: "gray", ml: 1 }}
-          >
+          <Typography variant="body2" display="inline" sx={{ color: "gray", ml: 1 }}>
             (Optional)
           </Typography>
           <TextField
@@ -188,12 +167,7 @@ const AddNewExerciseModal = ({
           <Typography>Correct or incorrect</Typography>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-          <Button
-            variant="contained"
-            color="info"
-            endIcon={<SaveIcon />}
-            onClick={handleSave}
-          >
+          <Button variant="contained" color="info" endIcon={<SaveIcon />} onClick={handleSave}>
             Save
           </Button>
         </Box>
@@ -204,11 +178,7 @@ const AddNewExerciseModal = ({
           onClose={handleCloseSnackbar}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
-          <Alert
-            onClose={handleCloseSnackbar}
-            severity="error"
-            sx={{ width: "100%" }}
-          >
+          <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: "100%" }}>
             {snackbarMsg}
           </Alert>
         </Snackbar>

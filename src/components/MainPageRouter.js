@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     boxSizing: "border-box",
     minWidth: "100%",
-    minHeight: "calc(100vh - 275px)",
+    minHeight: "calc(100vh - 176px)",
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(4),
     background: theme.palette.bg.dark,

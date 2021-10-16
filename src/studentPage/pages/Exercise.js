@@ -91,18 +91,13 @@ const Exercise = () => {
   //filter this exercise from the data from api to display below
   useEffect(() => {
     let thisChapter;
-    if (user?.chapters)
-      thisChapter = user.chapters.find((chapter) => chapter._id === chapterId);
-    const thisExercise = thisChapter?.exercises?.find(
-      (exercise) => exercise._id === exerciseId
-    );
+    if (user?.chapters) thisChapter = user.chapters.find((chapter) => chapter._id === chapterId);
+    const thisExercise = thisChapter?.exercises?.find((exercise) => exercise._id === exerciseId);
     //indexing each question cause the data from database doesn't come with indices
-    if (isNaN(thisExercise.questions[0].title.trim()[0])) {
-      thisExercise.questions = thisExercise?.questions?.map(
-        (question, index) => {
-          return { ...question, title: `${index + 1}. ${question.title}` };
-        }
-      );
+    if (isNaN(thisExercise.questions[0].title?.trim()[0])) {
+      thisExercise.questions = thisExercise?.questions?.map((question, index) => {
+        return { ...question, title: `${index + 1}. ${question.title || ""}` };
+      });
     }
 
     //index of this exercise
@@ -153,16 +148,11 @@ const Exercise = () => {
   };
 
   const generateTitle = (title) => {
-    if (!title?.includes("_"))
-      return (
-        <Typography sx={{ fontSize: 18, fontWeight: 500, mb: 2 }}>
-          {title}
-        </Typography>
-      );
+    if (!title?.includes("_")) return <Typography sx={{ fontSize: 18, fontWeight: 500, mb: 2 }}>{title}</Typography>;
     const [part1, part2] = title.split("_");
     return (
       <Typography sx={{ fontSize: 18, fontWeight: 500, mb: 2 }}>
-        {part1}{" "}
+        {part1 + " "}
         <span
           style={{
             display: "inline-block",
@@ -170,7 +160,7 @@ const Exercise = () => {
             borderBottom: "1px solid black",
           }}
         ></span>
-        {part2}
+        {" " + part2}
       </Typography>
     );
   };
@@ -242,7 +232,7 @@ const Exercise = () => {
   };
 
   //extract the number or index from the question title. the minus one is to compensate for indicing.
-  const getNum = (title) => Number(title.split(".")[0]) - 1;
+  const getNum = (title) => Number(title?.split(".")[0]) - 1;
 
   const generateClass = (index, correct, studentsChoice) => {
     if (!hasSubmitted) return classes.pointer;
@@ -259,9 +249,7 @@ const Exercise = () => {
   };
   const nextPage = () => {
     if (hasSubmitted && page.currentPage === page.count) {
-      data.nextExerciseId
-        ? history.push(`/courses/${chapterId}/${data.nextExerciseId}`)
-        : history.push("/courses");
+      data.nextExerciseId ? history.push(`/courses/${chapterId}/${data.nextExerciseId}`) : history.push("/courses");
       headerRef.current.scrollIntoView();
     } else {
       setPage({ ...page, currentPage: page.currentPage + 1 });
@@ -277,10 +265,7 @@ const Exercise = () => {
             {data?.chapter?.title}
           </Typography>
           {hasSubmitted && (
-            <Typography
-              variant="h6"
-              sx={{ border: 1, px: 1, py: 0.5, color: "gray" }}
-            >
+            <Typography variant="h6" sx={{ border: 1, px: 1, py: 0.5, color: "gray" }}>
               {msg.msg}
             </Typography>
           )}
@@ -298,75 +283,51 @@ const Exercise = () => {
         </Typography>
       </Paper>
       <Grid container spacing={1.5} className={classes.gridContainer}>
-        {data?.exercise?.questions
-          ?.slice(...calculatePage())
-          .map((question, questionIndex) => (
-            <Grid item xs={12} key={questionIndex}>
-              <Paper className={classes.paper} square>
-                {generateTitle(question.title)}
+        {data?.exercise?.questions?.slice(...calculatePage()).map((question, questionIndex) => (
+          <Grid item xs={12} key={questionIndex}>
+            <Paper className={classes.paper} square>
+              {generateTitle(question.title)}
 
-                <Box sx={{ display: "flex", gap: 1, flexDirection: "column" }}>
-                  {question.choices.map((choice, choiceIndex) => (
-                    <Box key={Math.random()} className={classes.radioContainer}>
-                      {hasSubmitted || (
-                        <Radio
-                          disableRipple
-                          size="small"
-                          onChange={() =>
-                            handleSelect(getNum(question.title), choiceIndex)
-                          }
-                          checked={
-                            choices[getNum(question.title)] === choiceIndex
-                          }
-                        />
-                      )}
-                      <Typography
-                        onClick={() =>
-                          handleSelect(getNum(question.title), choiceIndex)
-                        }
-                        className={generateClass(
-                          choiceIndex,
-                          question.correct,
-                          question.studentsChoice
-                        )}
-                      >
-                        {choice}
-                      </Typography>
+              <Box sx={{ display: "flex", gap: 1, flexDirection: "column" }}>
+                {question.choices.map((choice, choiceIndex) => (
+                  <Box key={Math.random()} className={classes.radioContainer}>
+                    {hasSubmitted || (
+                      <Radio
+                        disableRipple
+                        size="small"
+                        onChange={() => handleSelect(getNum(question.title), choiceIndex)}
+                        checked={choices[getNum(question.title)] === choiceIndex}
+                      />
+                    )}
+                    <Typography
+                      onClick={() => handleSelect(getNum(question.title), choiceIndex)}
+                      className={generateClass(choiceIndex, question.correct, question.studentsChoice)}
+                    >
+                      {choice}
+                    </Typography>
 
-                      {question.studentsChoice !== question.correct &&
-                        question.studentsChoice === choiceIndex && (
-                          <CloseIcon className={classes.red} />
-                        )}
+                    {question.studentsChoice !== question.correct && question.studentsChoice === choiceIndex && (
+                      <CloseIcon className={classes.red} />
+                    )}
 
-                      {question.studentsChoice === question.correct &&
-                        question.studentsChoice === choiceIndex && (
-                          <CheckIcon className={classes.green} />
-                        )}
-                    </Box>
-                  ))}
-                </Box>
-              </Paper>
-            </Grid>
-          ))}
+                    {question.studentsChoice === question.correct && question.studentsChoice === choiceIndex && (
+                      <CheckIcon className={classes.green} />
+                    )}
+                  </Box>
+                ))}
+              </Box>
+            </Paper>
+          </Grid>
+        ))}
       </Grid>
       {msg.show && (
-        <Typography
-          className={classes.green}
-          variant={msg.variant}
-          align="center"
-          mt={2}
-        >
+        <Typography className={classes.green} variant={msg.variant} align="center" mt={2}>
           {msg.msg}
         </Typography>
       )}
       <Box className={classes.buttonContainer}>
         {page.currentPage !== 0 && (
-          <Button
-            variant="contained"
-            color="info"
-            onClick={prevPage}
-            startIcon={<ArrowBackIcon />}
-          >
+          <Button variant="contained" color="info" onClick={prevPage} startIcon={<ArrowBackIcon />}>
             Page: {page.currentPage}
           </Button>
         )}
@@ -374,15 +335,8 @@ const Exercise = () => {
         <Typography sx={{ flex: 1 }} />
 
         {page.count !== page.currentPage || hasSubmitted ? (
-          <Button
-            variant="contained"
-            color="info"
-            onClick={nextPage}
-            endIcon={<ArrowForwardIcon />}
-          >
-            {page.count === page.currentPage
-              ? "Next Exercise"
-              : `Page: ${page.currentPage + 2}`}
+          <Button variant="contained" color="info" onClick={nextPage} endIcon={<ArrowForwardIcon />}>
+            {page.count === page.currentPage ? "Next Exercise" : `Page: ${page.currentPage + 2}`}
           </Button>
         ) : (
           <LoadingButton

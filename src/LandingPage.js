@@ -39,7 +39,6 @@ const useStyle = makeStyles((theme) => ({
     fontWeight: 500,
     transition: "all .75s",
     [theme.breakpoints.down("sm")]: {
-      //   display: (toggle) => (toggle ? "flex" : "none"),
       maxHeight: (toggle) => (toggle ? "181px" : "0px"),
       display: "flex",
       flexDirection: "column",
@@ -155,12 +154,12 @@ const LandingPage = () => {
 
   useEffect(() => {
     const myText1 = '"Learning Today . . . Leading Tomorrow."';
-    const myText2 = '"Education is of the utmost importance . . ."';
+    const myText2 = '"Education is of utmost importance . . ."';
     if (iteration === 0) {
       const timeOut1 = setTimeout(() => {
         setIndex(index + 1);
         setText((prev) => {
-          prev + myText1[index] === myText1 && setIteration((prev) => prev + 1);
+          prev + myText1[index] === myText1 && setIteration(iteration + 1);
           return prev + (myText1[index] || "");
         });
       }, 50);
@@ -169,7 +168,7 @@ const LandingPage = () => {
       const timeOut2 = setTimeout(() => {
         setIndex(index - 1);
         setText((prev) => {
-          !prev.slice(0, -1) && setIteration((prev) => prev + 1);
+          !prev.slice(0, -1) && setIteration(iteration + 1);
           return prev.slice(0, -1);
         });
       }, 25);
@@ -178,7 +177,7 @@ const LandingPage = () => {
       const timeOut2 = setTimeout(() => {
         setIndex(index + 1);
         setText((prev) => {
-          prev + myText2[index] === myText2 && setIteration((prev) => prev + 1);
+          prev + myText2[index] === myText2 && setIteration(iteration + 1);
           return prev + (myText2[index] || "");
         });
       }, 50);

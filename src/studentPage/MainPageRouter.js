@@ -11,6 +11,9 @@ import Home from "./pages/Home";
 import Courses from "./pages/Courses";
 import Exercise from "./pages/Exercise";
 import UnderConstruction from "./pages/UnderConstruction";
+import Notifications from "./pages/Notifications";
+import TakeTest from "./pages/TakeTest";
+import Test from "./pages/Test";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     boxSizing: "border-box",
     minWidth: "100%",
-    minHeight: "calc(100vh - 275px)",
+    minHeight: "calc(100vh - 176px)",
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(4),
     background: theme.palette.bg.dark,
@@ -46,6 +49,9 @@ const MainPageRouter = (props) => {
         <Switch>
           <Route path="/home" exact component={Home} />
           <Route path="/courses" exact component={Courses} />
+          <Route path="/notifications" exact component={Notifications} />
+          <Route path="/tests" exact component={TakeTest} />
+          <Route path="/tests/:id" exact component={Test} />
           <Route path="/courses/:chapterId/:exerciseId" exact component={Exercise} />
           <Route path="/" component={UnderConstruction} />
         </Switch>
